@@ -34,6 +34,7 @@ digit-drawing-recognizer/
 ├── MINIT_model.h5        # โมเดลที่ผ่านการฝึกฝนสำหรับทำนายตัวเลข
 ├── requirements.txt      # รายการ dependencies ที่จำเป็น
 ├── README.md             # เอกสารนี้
+├── TRAIN_MLP_MNIT        # ไฟล์ที่ใช้ Train model MLP นามสกุล jupyer
 └── /dist/
     ├── main.exe          # ไฟล์ EXE
 ```
