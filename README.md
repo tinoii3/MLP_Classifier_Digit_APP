@@ -17,7 +17,7 @@
 ## Project structure
 
 ```
-digit-drawing-recognizer/
+MLP_Classifier_Digit_APP/
 ├── main.py                 # Application entry point
 ├── home_page.py            # Home / menu screen
 ├── writing_page.py         # Drawing canvas and prediction UI
@@ -38,11 +38,13 @@ digit-drawing-recognizer/
 
 ### 1. Install dependencies
 
+Using `requirements.txt` (recommended):
+
 ```bash
 pip install -r requirements.txt
 ```
 
-Or install packages manually:
+Equivalent manual install:
 
 ```bash
 pip install PyQt5 numpy opencv-python h5py
@@ -70,7 +72,7 @@ pip install pyinstaller
 pyinstaller --onefile --add-data "MNIT_model.h5;." main.py
 ```
 
-Or use the provided spec file if you maintain `main.spec`:
+Or use the provided spec file:
 
 ```bash
 pyinstaller main.spec
