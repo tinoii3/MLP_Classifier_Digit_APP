@@ -1,82 +1,81 @@
 # Digit Writing Recognizer
-โปรแกรม **Digit Writing Recognizer** เป็นแอปพลิเคชันสำหรับวาดตัวเลขด้วยเมาส์บนหน้าจอและทำนายตัวเลขที่วาดโดยใช้โมเดลที่ผ่านการฝึกฝนไว้ล่วงหน้า (`MINIT_model.h5`)
-โปรแกรมนี้ใช้ **PyQt5** สำหรับ GUI, **OpenCV** สำหรับประมวลผลภาพ และ **TensorFlow/Keras** สำหรับการทำนายตัวเลข
+
+**Digit Writing Recognizer** is a desktop app for drawing digits with the mouse and classifying them with a pretrained model (`MNIT_model.h5`). The GUI uses **PyQt5**, image preprocessing uses **OpenCV**, and inference runs in **NumPy** with weights loaded from the Keras HDF5 file via **h5py** (no TensorFlow required at runtime).
 
 ---
 
-## ฟีเจอร์ของโปรแกรม
+## Features
 
-- **วาดตัวเลข**  
-  วาดตัวเลขด้วยเมาส์บนหน้าจอ (canvas) พร้อมแสดงผลแบบเรียลไทม์
-
-- **ประมวลผลภาพ**  
-  คัดแยกส่วนที่มีการวาดด้วยการหาขอบเขต (bounding box) และปรับขนาดภาพให้เป็น 28x28 ตามรูปแบบของ MNIST
-
-- **ทำนายตัวเลข**  
-  ใช้โมเดล `MINIT_model.h5` ที่ผ่านการฝึกฝนมาแล้วเพื่อทำนายตัวเลขที่วาด
-
-- **แสดงผลการทำนาย**  
-  แสดงผลลัพธ์ (label) ที่ได้จากการทำนายลงบนภาพในตำแหน่งที่ใกล้กับบริเวณที่วาด
-
-- **ล้างหน้าจอ (Clear Canvas)**  
-  มีฟังก์ชันสำหรับล้างหน้าจอเพื่อเริ่มวาดใหม่
+- **Drawing** — Draw digits on a black canvas with live feedback.
+- **Image processing** — Finds the drawn region (bounding box) and resizes it to 28×28, matching the MNIST-style input.
+- **Classification** — Uses the trained MLP in `MNIT_model.h5` to predict the digit.
+- **On-canvas labels** — Shows the predicted class name in green near the stroke.
+- **Clear canvas** — Resets the drawing and predictions.
 
 ---
 
-## **Project Structure**
+## Project structure
+
 ```
 digit-drawing-recognizer/
-├── main.py               # จุดเริ่มต้นของโปรแกรม
-├── home_page.py          # หน้าจอหลัก
-├── writing_page.py       # หน้าวาดรูป และทำนายผล
-├── guide_page.py         # รายละเอียดการใช้งานเบื้องต้น
-├── main.spec             # สำคัญมาก!! ไฟล์เก็บการตั้งค่าต่างๆสำหรับการ build ไฟล์ .exe
-├── MINIT_model.h5        # โมเดลที่ผ่านการฝึกฝนสำหรับทำนายตัวเลข
-├── requirements.txt      # รายการ dependencies ที่จำเป็น
-├── README.md             # เอกสารนี้
-├── TRAIN_MLP_MNIT        # ไฟล์ที่ใช้ Train model MLP นามสกุล jupyer
-└── /dist/
-    ├── main.exe          # ไฟล์ EXE
+├── main.py                 # Application entry point
+├── home_page.py            # Home / menu screen
+├── writing_page.py         # Drawing canvas and prediction UI
+├── guide_page.py           # Short usage guide
+├── mnist_mlp_inference.py  # Loads Keras H5 weights and runs MLP inference in NumPy
+├── main.spec               # PyInstaller settings for building a Windows .exe
+├── MNIT_model.h5           # Trained Keras model weights
+├── requirements.txt        # Python dependencies
+├── README.md               # This file
+├── TRAIN_MLP_MNIT.ipynb    # Notebook used to train the MLP
+└── dist/
+    └── main.exe            # Built executable (after PyInstaller)
 ```
 
 ---
 
-## **การติดตั้ง Dependencies และการรันโปรเจกต์**
+## Install dependencies and run
 
-### **:one: ติดตั้ง Dependencies**
-ใช้คำสั่งนี้เพื่อติดตั้งแพ็กเกจที่จำเป็น:
-```bash
-pip install PyQt5 numpy opencv-python tensorflow
-```
-หรือหากมีไฟล์ `requirements.txt` ให้ใช้:
+### 1. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### **:two: รันโปรเจกต์**
+Or install packages manually:
+
+```bash
+pip install PyQt5 numpy opencv-python h5py
+```
+
+### 2. Run the app
+
 ```bash
 python main.py
 ```
 
 ---
 
-## **วิธีการ Build เป็นไฟล์ EXE (Windows)**
+## Build a Windows executable
 
-### **:one: ติดตั้ง PyInstaller**
+### 1. Install PyInstaller
+
 ```bash
 pip install pyinstaller
 ```
 
-### **:two: Build เป็นไฟล์ Executable**
+### 2. Build
+
 ```bash
 pyinstaller --onefile --add-data "MNIT_model.h5;." main.py
 ```
 
----
+Or use the provided spec file if you maintain `main.spec`:
 
-### **ตำแหน่งไฟล์ EXE**
+```bash
+pyinstaller main.spec
+```
 
-หลังจาก build เสร็จ ไฟล์ executable จะอยู่ในโฟลเดอร์ dist ภายในโฟลเดอร์โปรเจกต์
+The executable is written under the `dist` folder in the project directory.
 
-**:hourglass_flowing_sand: หมายเหตุ:**  
-ไฟล์ `.exe` อาจใช้เวลา **ประมาณ 10 วินาที** ในการรัน
+**Note:** The first launch of the `.exe` may take on the order of ~10 seconds while files unpack.
