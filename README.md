@@ -46,7 +46,7 @@ digit-drawing-recognizer/
 ### **:one: ติดตั้ง Dependencies**
 ใช้คำสั่งนี้เพื่อติดตั้งแพ็กเกจที่จำเป็น:
 ```bash
-pip install PyQt5 numpy opencv-python tensorflow
+pip install PyQt5 numpy opencv-python tensorflow matplotlib
 ```
 หรือหากมีไฟล์ `requirements.txt` ให้ใช้:
 ```bash
